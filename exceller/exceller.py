@@ -70,7 +70,12 @@ class Exceller:
 			
 			for i in range(0, self.queryset.count()):
 				for field in self.field_set:
-					ws.write(i+1, self.field_set.index(field), self.queryset[i].__getattribute__(field).__str__())
+					value = self.queryset[i].__getattribute__(field)
+					
+					if hasattr(value, '__call__'):
+						value = value()
+						
+					ws.write(i+1, self.field_set.index(field),value .__str__())
 			wb.save(self.path+"/" +self.filename)
 			return "The Excel is Ready"
 		else:
